@@ -44,22 +44,21 @@ public class SchoolController {
         model.addAttribute("teacher", teacher);
         return "change-teacher";
     }
+
     @GetMapping("/update/{id}")
-    public String changeStudent(@PathVariable(name = "id") Long id, Model model){
-        Optional<Student> st =  students.stream().filter(i -> i.getId().equals(id)).findFirst();
-        if(st == null)
-            return "list";
+    public String changeStudent(@PathVariable(name = "id") Long id, Model model) {
+        Optional<Student> st = students.stream().filter(i -> i.getId().equals(id)).findFirst();
+        if (st.isEmpty())
+            return getStudents(model);
         model.addAttribute("student", st);
         return "update-student";
+
     }
+
     @PostMapping("/update")
     public String updateStudent(
-            @Valid @ModelAttribute Student student,
-            BindingResult result,
-            Model model
+            @Valid @ModelAttribute Student student
     ) {
-        if (result.hasErrors())
-            return "update-student";
         for (Student st : students) {
             if (st.getId().equals(student.getId())) {
                 st.setFirst(student.getFirst());
@@ -81,20 +80,6 @@ public class SchoolController {
         this.teacher = teacher;
         return "redirect:/students";
     }
-
-    @PutMapping("/students/{id}")
-    public String updateStudent(
-            @PathVariable(name = "id") Long id,
-            @Valid @ModelAttribute Student student,
-            BindingResult result,
-            Model model
-    ) {
-        if (result.hasErrors())
-            return "change-teacher";
-        this.teacher = teacher;
-        return "redirect:/students";
-    }
-
 
     @PostMapping("/students")
     public String createStudent(
