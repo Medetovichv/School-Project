@@ -45,7 +45,7 @@ public class SchoolController {
         return "change-teacher";
     }
 
-    @GetMapping("/update/{id}")
+    @GetMapping("/student/{id}")
     public String changeStudent(@PathVariable(name = "id") Long id, Model model) {
         Optional<Student> st = students.stream().filter(i -> i.getId().equals(id)).findFirst();
         if (st.isEmpty())
@@ -57,8 +57,12 @@ public class SchoolController {
 
     @PostMapping("/update")
     public String updateStudent(
-            @Valid @ModelAttribute Student student
+            @Valid @ModelAttribute Student student,
+            BindingResult result,
+            Model model
     ) {
+        if (result.hasErrors())
+            return "update-student";
         for (Student st : students) {
             if (st.getId().equals(student.getId())) {
                 st.setFirst(student.getFirst());
