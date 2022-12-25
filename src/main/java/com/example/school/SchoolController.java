@@ -1,17 +1,19 @@
 package com.example.school;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 public class SchoolController {
+
+    @Autowired
+    SchoolScheduler scheduler;
     private List<Student> students = new ArrayList<>(
             List.of(
                     new Student(1L, "Max", "Petrov", 19),
@@ -26,12 +28,16 @@ public class SchoolController {
 
     @GetMapping("/students")
     public String getStudents(Model model) {
+
+//        scheduler.scheduleTask(new Date(
+//                System.currentTimeMillis() + 5000
+//        ));
         String status = null;
         model.addAttribute("message", "It's a test message");
         model.addAttribute("students", students);
         model.addAttribute("tutor", teacher);
         model.addAttribute("status", status);
-        return "list";
+        return "list" ;
     }
 
     @GetMapping("/add")
